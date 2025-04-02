@@ -1,18 +1,11 @@
-resource "aws_instance" "expense" {
-  count = length(var.instances)
-  # count = 3
-  ami                    = "ami-09c813fb71547fc4f" # This is our devops-practice AMI ID
+resource "aws_instance" "this" {
+  ami                    = data.aws_ami.joindevops.id # This is our devops-practice AMI ID
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   instance_type          = "t3.micro"
-  /* tags = {
-    Name    = var.instances[count.index]
-  } */
-  tags = merge(
-    var.common_tags,
-    {
-        Name = var.instances[count.index]
-    }
-  )
+  tags = {
+    Name    = "terraform-demo"
+    Purpose = "terraform-practice"
+  }
 }
 
 resource "aws_security_group" "allow_tls" {
